@@ -4,19 +4,12 @@ Application key [base64:QGXzlEIFKngjP4jjpHEWDkh0zRgwdxGiZvKxWqNy4QM=] set succes
 Starting MySQL
  * Starting MySQL database server mysqld                                                                                                                                                                 [ OK ] 
 Configuring database
+
 Starting apache
  * Restarting web server apache2                                                                                                                                                                         [ OK ] 
 
 PHPMyAdmin Installation complete. You can log in at: https://comps710-seokjinkim.c9users.io/phpmyadmin with the following username (and blank password):
 
 Username: seokjinkim
-
-
 GRANT ALL PRIVILEGES ON *.* TO 'seokim91'@'%' IDENTIFIED BY 'test';
 
-
-php artisan make:auth
-php artisan migrate
-
-
-Atisan is console for PHP and laravel

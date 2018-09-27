@@ -1,0 +1,32 @@
+
+.schedule-rows td {
+  width: 70px;
+  height: 20px;
+  margin: 3px;
+  padding: 5px;
+  background-color: #DCDCDC;
+  cursor: pointer;
+  border: 1px solid #FFFFFF;
+}
+
+.schedule-fix-rows td {
+  width: 70px;
+  height: 20px;
+  margin: 3px;
+  padding: 5px;
+  background-color: #DCDCDC;
+  border: 1px solid #FFFFFF;
+}
+
+
+.schedule-rows td:first-child {
+  background-color: transparent;
+  text-align: right;
+  position: relative;
+  top: -12px;
+}
+
+.schedule-rows td[data-selected],
+.schedule-rows td[data-selecting] { background-color: #FFFF99; }
+
+.schedule-rows td[data-disabled] { opacity: 0.55; }

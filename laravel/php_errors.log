@@ -1,0 +1,19 @@
+[18-Sep-2018 01:47:39 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/ubuntu/workspace/laravel/vendor/laravel/framework/src/Illuminate/Support/Arr.php on line 278
+[18-Sep-2018 02:35:34 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/ubuntu/workspace/laravel/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/GuardsAttributes.php on line 176
+[20-Sep-2018 03:29:40 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/ubuntu/workspace/laravel/app/Http/Controllers/factories/ApplicantFactory.php on line 2
+[20-Sep-2018 03:49:35 UTC] PHP Fatal error:  Can't use method return value in write context in /home/ubuntu/workspace/laravel/app/Http/Controllers/DBSeedController.php on line 196
+[21-Sep-2018 14:06:46 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/ubuntu/workspace/laravel/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php on line 1271
+[22-Sep-2018 00:00:02 UTC] PHP Fatal error:  Only variables can be passed by reference in /home/ubuntu/workspace/laravel/storage/framework/views/e7d04ef8c0a99a7c23e4b34fa24a67d1a6e00dde.php on line 20
+[22-Sep-2018 00:02:35 UTC] PHP Fatal error:  Only variables can be passed by reference in /home/ubuntu/workspace/laravel/storage/framework/views/e7d04ef8c0a99a7c23e4b34fa24a67d1a6e00dde.php on line 20
+[22-Sep-2018 10:40:53 UTC] PHP Fatal error:  Can't use method return value in write context in /home/ubuntu/workspace/laravel/app/Http/Controllers/AdminController.php on line 40
+[23-Sep-2018 09:49:12 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/ubuntu/workspace/laravel/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 733
+[23-Sep-2018 10:03:13 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/ubuntu/workspace/laravel/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 1770
+[23-Sep-2018 10:06:33 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/ubuntu/workspace/laravel/app/Http/Controllers/DBSeedController.php on line 277
+[23-Sep-2018 10:37:13 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/ubuntu/workspace/laravel/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 1770
+[23-Sep-2018 10:39:16 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/ubuntu/workspace/laravel/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 1770
+[26-Sep-2018 10:54:00 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\BookingController::getDatetimesList() in /home/ubuntu/workspace/laravel/app/Http/Controllers/BookingController.php on line 92
+[26-Sep-2018 10:55:05 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\BookingController::getDatetimesList() in /home/ubuntu/workspace/laravel/app/Http/Controllers/BookingController.php on line 92
+[26-Sep-2018 12:14:16 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\AdminController::getBookings() in /home/ubuntu/workspace/laravel/app/Http/Controllers/AdminController.php on line 196
+[26-Sep-2018 12:14:40 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\AdminController::getBookings() in /home/ubuntu/workspace/laravel/app/Http/Controllers/AdminController.php on line 196
+[26-Sep-2018 12:14:48 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\AdminController::getBookings() in /home/ubuntu/workspace/laravel/app/Http/Controllers/AdminController.php on line 196
+[26-Sep-2018 12:20:59 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\AdminController::getBookings() in /home/ubuntu/workspace/laravel/app/Http/Controllers/AdminController.php on line 203
