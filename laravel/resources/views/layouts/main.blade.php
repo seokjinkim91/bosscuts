@@ -5,20 +5,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Bosscuts Barbershop - Hamilton NZ</title>
+    
+    <!-- for SEO Stuffs -->
+    <title>Barbershop | Men's Hairstyle | Bosscuts - Hamilton NZ</title>
+    <meta name="description" content="Bosscuts is Barbershop in Hamilton and provide great services for mens hairstyles">
 
-    <!-- Default stylesheets-->
+    <!-- Open Graph Tag -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Barbershop | Men's Hairstyle | Bosscuts - Hamilton NZ">
+    <meta property="og:description" content="Bosscuts is Barbershop in Hamilton and provide great services for mens hairstyles">
+    <meta property="og:url" content="http://www.barber-shop.co.nz/">
+    <meta property="og:image" content="{{ asset('images/bosscuts_main2.jpg')}}">
+    <meta property="og:site_name" content="Bosscuts Barbershop">
+    
+    <!-- Bootstraps-->
+    <link rel="description" href="lib/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css">
     
-	<!-- Template specific stylesheets--> 
+    <!-- Google Fonts--> 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Volkhov:400i">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800">
     
+    
+    <!-- Plug-ins CSS-->
     <link rel="stylesheet" href="lib/animate.css/animate.css">
     <link rel="stylesheet" href="lib/components-font-awesome/css/font-awesome.min.css">
-    
-
     <link rel="stylesheet" href="lib/et-line-font/et-line-font.css">
     <link rel="stylesheet" href="lib/flexslider/flexslider.css">
     <link rel="stylesheet" href="lib/owl.carousel/dist/assets/owl.carousel.min.css">
@@ -28,9 +40,9 @@
     
     <!-- Calendar CSS-->
   	<link href="css/jquery.datepick.css" rel="stylesheet">
-	<!-- Main stylesheet and color file-->
+	  
+	  <!-- Main stylesheet and color file-->
     <link rel="stylesheet" href="css/style.css">
-    <link id="color-scheme" rel="stylesheet" href="css/colors/default.css">
     
     <!--  
     JavaScripts
@@ -45,6 +57,7 @@
     <script src="lib/imagesloaded/imagesloaded.pkgd.js"></script>
     <script src="lib/flexslider/jquery.flexslider.js"></script>
     <script src="lib/owl.carousel/dist/owl.carousel.min.js"></script>
+    <script src="{{ asset('js/services.js') }}"></script>
     <!--<script src="lib/smoothscroll.js"></script>-->
     <script src="lib/magnific-popup/dist/jquery.magnific-popup.js"></script>
     <script src="lib/simple-text-rotator/jquery.simple-text-rotator.min.js"></script>
@@ -64,7 +77,8 @@
       @include('include.mainNavbar')
       <div class="main">
          @yield('content')
-	  </div>
+	    </div>
+        
         <hr class="divider-d">
         <footer class="footer bg-dark">
           <div class="container">
@@ -75,6 +89,7 @@
             </div>
           </div>
         </footer>
+     
       <div class="scroll-up"><a href="#totop"><i class="fa fa-angle-double-up"></i></a></div>
     </main>
 

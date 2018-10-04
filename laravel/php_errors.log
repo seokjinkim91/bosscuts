@@ -17,3 +17,4 @@
 [26-Sep-2018 12:14:40 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\AdminController::getBookings() in /home/ubuntu/workspace/laravel/app/Http/Controllers/AdminController.php on line 196
 [26-Sep-2018 12:14:48 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\AdminController::getBookings() in /home/ubuntu/workspace/laravel/app/Http/Controllers/AdminController.php on line 196
 [26-Sep-2018 12:20:59 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\AdminController::getBookings() in /home/ubuntu/workspace/laravel/app/Http/Controllers/AdminController.php on line 203
+[01-Oct-2018 03:34:33 UTC] PHP Fatal error:  Maximum execution time of 30 seconds exceeded in /home/ubuntu/workspace/laravel/app/Http/Controllers/DBSeedController.php on line 277

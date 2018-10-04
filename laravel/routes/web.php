@@ -21,7 +21,8 @@
 Route::get('/', 'MainController@index')->name('index');
 
 Route::get('/booking', 'MainController@booking')->name('booking'); 
-Route::get('bookingDate/{date}', 'MainController@bookingDate');
+Route::get('/bookingDate/{date}', 'MainController@bookingDate');
+
 Route::get('bookingServices/{empid}','MainController@bookingServices');
 Route::post('bookingSubmit/{userid}/{datetimeid}/{service}/{email}/{contact}/{name}','MainController@bookingSubmit');
 
@@ -49,21 +50,29 @@ Route::post('/admin/schedule/disable', 'AdminController@disableSchedule');
 
 
 
-Route::get('/admin/bookings', 'AdminController@getBookings');
-Route::post('/admin/bookings','AdminController@getBookings');
+Route::get('/admin/bookings', 'AdminController@getBooking');
+//Route::get('/admin/bookings/{tab}','AdminController@getBookings')->name('getBookings');
+Route::get('/admin/bookingDate/{date}', 'MainController@bookingDate');
+Route::get('/admin/bookingServices/{empid}','MainController@bookingServices');
+
 Route::get('/admin/bookings/{bookingid}/{status}', 'AdminController@updateBookings')->name('updateBookings');
+Route::post('/admin/bookings/insertBooking','AdminController@insertBooking');
+Route::get('/admin/bookings/{bookingid}', 'AdminController@deleteBookings')->name('deleteBookings');
 
 Route::get('/admin/profile', 'AdminController@profile'); 
+Route::post('/admin/profile','AdminController@addProfile');
+
 Route::get('/admin/services', 'AdminController@services'); 
 Route::get('/admin/applicants', 'AdminController@applicants');
 Route::get('/admin/users', 'AdminController@users')->name('users');
 Route::get('/admin/users/{userid}', 'AdminController@userstatus')->name('userstatus');
 Route::post('/admin/users','AdminController@updateUsers');
-
+Route::post('/admin/users/add','AdminController@addUsers');
 
 Route::post('/admin/services','AdminController@editService');
 Route::delete('/admin/services','AdminController@deleteService');
 Route::delete('/admin/applicants','AdminController@deleteApplicants');
+Route::get('/admin/applicants/{filename}','AdminController@downloadApplicant');
 
 
 /* 

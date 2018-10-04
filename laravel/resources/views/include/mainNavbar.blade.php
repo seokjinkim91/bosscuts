@@ -14,8 +14,8 @@
 			</button>
 			<a class="navbar-brand" href="https://comps710-seokjinkim.c9users.io/laravel/public/">Boss Cuts</a>   
 			
-			<a class="navbar-brand" href="https://www.facebook.com/bosscutsnz/"><i class="fa fa-facebook"></i></a>
-			<a class="navbar-brand" href="https://www.instagram.com/bosscutnzbarber/"><i class="fa fa-instagram"></i></a>
+			<a class="navbar-brand" target="_blank" href="https://www.facebook.com/bosscutsnz/"><i class="fa fa-facebook"></i></a>
+			<a class="navbar-brand" target="_blank" href="https://www.instagram.com/bosscutnzbarber/"><i class="fa fa-instagram"></i></a>
     </div>
     <div class="collapse navbar-collapse" id="custom-collapse">
             <ul class="nav navbar-nav navbar-right">

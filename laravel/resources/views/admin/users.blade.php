@@ -14,14 +14,14 @@
              
             </div>
              <div class="form-group">
-                <button class="btn btn-d btn-round" type="submit"><i class="fa fa-male"></i> New User</button>
+                <button type="button" data-target="#addDialog"  data-toggle="modal" class="btn btn-d btn-round" ><i class="fa fa-male"></i> New User</button>
             </div>
           <!--`name`, `contact`, `email`, `role`, `enable`, `photo_url`-->
             <div class="form-group">
-                  <table class="table table-striped">
-                    <thead>
+                  <table class="table">
+                    <thead class="thead-dark">
                       <tr>
-                        <th>Photo</th>
+                        <th></th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Role</th>
@@ -32,27 +32,40 @@
                     </thead>
                     <tbody>
                             @foreach($users as $user)
-                            <tr>
+                          
                               @php
                   						$id= $user->user_id;
                   						$enable = !$user->enable;
                   						$btnValue= $enable?'Enable':'Disable';
                   						$btnStyle= $enable?'btn-primary':'btn-danger';
+                  						$trStyle= $enable?'background-color: #D3D3D3;':'background-color: #FFFFFF;';
                   						
                   						$name=$user->name;
                   						$email=$user->email;
                   						$role=$user->role;
                   						$contact=$user->contact;
                   						$title=$user->title;
+                  						
+                  						$imgpath=$user->photo_url;
                   						@endphp
                               
+                            <tr style='{{$trStyle}}'>
                               
-                              <td><img src="{{$user->photo_url}}" height="10" width="15"></img></td>
+                              <td><span class="icon-profile-male"></span></td>
                               <td>{{$name}}</td>
                               <td>{{$email}}</td>
                   						<td>{{$role}}</td>
                   						<td>{{$contact}}</td>
-                  						<td>{{$title}}</td>
+                  						<td> 
+                  					   @if(strlen($title)>0)   
+                  					    <?php  $services = explode(',', $title); ?>
+                  					      <ul>
+                  					        @foreach($services as $service)
+                  					          <li>{{$service}}</li>
+                  					        @endforeach
+                  					      </ul>	  
+                  					  @endif
+                  					 </td>
                   						
                   	
                   						
@@ -73,36 +86,127 @@
          </form>
                   
     	</div>
-    	   <div id="editDialog" class="modal fade"  data-backdrop="false">    
+    	
+    	
+    		<div id="addDialog" class="modal fade"  data-backdrop="false">    
     	   <div class="modal-dialog container" style="background-color: #F5F5F5;">
     	     
-                <form id="userForm" role="form" action="{{ action('AdminController@updateUsers') }}" method="post" >
+                <form id="addForm" role="form" action="{{ action('AdminController@addUsers') }}" method="post" >
                   <div class="form-group">
                     <label for="name">Name</label>
-                    <input class="form-control" type="text" id="name" name="name"/>
+                    <input class="form-control" type="text" placeholder="Full Name" name="name" required/>
                     <p class="help-block text-danger"></p>
                   </div>
                   <div class="form-group">
                     <label for="email">Email</label>
-                    <input class="form-control" type="email" id="email" name="email"/>
+                    <input class="form-control" type="email" name="email" required/>
                     <p class="help-block text-danger"></p>
                   </div>
+                   <div class="form-group">
+                    <label for="contact">Contact</label>
+                    <input class="form-control" type="number" name="contact"/>
+                    <p class="help-block text-danger"></p>
+                  </div>
+                  
+                   <div class="form-group">
+                    <label for="password">Password</label>
+                    <input class="form-control" type="password"name="password"/>
+                    <p class="help-block text-danger"></p>
+                  </div>
+                  
 				          <div class="form-group">
                     <label for="role">Role</label>
-                    <input class="form-control" type="text" id="role" name="role"/>
+                    <select name="role" class="form-control" >
+                    <option value="admin">Admin</option>
+                    <option value="staff">Staff</option>
+                    </select>
+                    <p class="help-block text-danger"></p>
+                  </div>
+                  
+				          <div class="form-group">
+                    <label for="role">Services</label>
+                    <select multiple name="services[]" class="form-control" >
+                    <option value="1">Mens cut & style</option>
+                    <option value="2">Kids cut & style 1 to 16 years</option>
+                    <option value="3">Clipper cut ( Clipper all over only)</option>
+                    <option value="4">Mens cut, style & beard trim</option>
+                    <option value="5">Beard trim only</option>
+                    
+                    </select>
+                    <p class="help-block text-danger"></p>
+                  </div>
+                  
+
+                 
+                  <div class="text-center">
+                    <button class="btn btn-block btn-round btn-d" id="cfsubmit" type="submit">Submit</button>
+                  </div>
+                  <div>
+                    <input name="_token" type="hidden" value="{{ csrf_token() }}"/>
+                    <!--<input type="hidden" name="userid" id="add_userid"/>-->
+                  </div>
+                </form>
+            
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+                 </div>
+            </div>
+    	
+    	
+    	
+    	   <div id="editDialog" class="modal fade"  data-backdrop="false">    
+    	   <div class="modal-dialog container" style="background-color: #F5F5F5;">
+    	     
+                <form id="editForm" role="form" action="{{ action('AdminController@updateUsers') }}" method="post" >
+                  <div class="form-group">
+                    <label for="name">Name</label>
+                    <input class="form-control" type="text" id="name" placeholder="Full Name" name="name" required/>
                     <p class="help-block text-danger"></p>
                   </div>
                   <div class="form-group">
-                    <label for="contact">Contact</label>
-                    <input class="form-control" type="tel" id="contact" name="contact"/>
+                    <label for="email">Email</label>
+                    <input class="form-control" type="email" id="email" name="email" required/>
                     <p class="help-block text-danger"></p>
                   </div>
-                  <!--<div class="form-group">-->
-                  <!--  <textarea class="form-control" rows="4" id="service" name="service"></textarea>-->
-                  <!--  <p class="help-block text-danger"></p>-->
-                  <!--</div>-->
+                   <div class="form-group">
+                    <label for="contact">Contact</label>
+                    <input class="form-control" type="number" id="contact" name="contact"/>
+                    <p class="help-block text-danger"></p>
+                  </div>
+                  
+                   <div class="form-group">
+                    <label for="password">Password</label>
+                    <input class="form-control" type="password" id="password" name="password"/>
+                    <p class="help-block text-danger"></p>
+                  </div>
+                  
+				          <div class="form-group">
+                    <label for="role">Role</label>
+                    <select name="role" class="form-control" >
+                    <option value="admin">Admin</option>
+                    <option value="staff">Staff</option>
+                    </select>
+                    <p class="help-block text-danger"></p>
+                  </div>
+                  
+				          <div class="form-group">
+                    <label for="role">Services</label>
+                    <select multiple name="services[]" class="form-control" >
+                    <option value="1">Mens cut & style</option>
+                    <option value="2">Kids cut & style 1 to 16 years</option>
+                    <option value="3">Clipper cut ( Clipper all over only)</option>
+                    <option value="4">Mens cut, style & beard trim</option>
+                    <option value="5">Beard trim only</option>
+                    
+                    </select>
+                    <p class="help-block text-danger"></p>
+                  </div>
+                  
+
+                 
                   <div class="text-center">
-                    <button class="btn btn-block btn-round btn-d" id="cfsubmit" type="submit">Submit</button>
+                    <button class="btn btn-block btn-round btn-d" id="editsubmit" type="submit">Submit</button>
                   </div>
                   <div>
                     <input name="_token" type="hidden" value="{{ csrf_token() }}"/>

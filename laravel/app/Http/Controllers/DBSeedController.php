@@ -280,6 +280,7 @@ class DBSeedController extends Controller
         
     
         //`booking_id`, `datetime_id`, `user_id`, `booking_name`, `booking_contact`, `booking_email`, `service_id`, `booking password`, `booking_memo`
+        $faker = \Faker\Factory::create();
         $i=0; 
         
         foreach($nums as $num){ 
@@ -287,11 +288,11 @@ class DBSeedController extends Controller
             $bookings = new Bookings; 
             $bookings->datetime_id = $results[$num]->datetime_id.''; 
             $bookings->user_id = $results[$num]->user_id; 
-            $bookings->booking_contact = rand(0,9).rand(0,9).rand(0,9).rand(0,9). rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9); 
-            $bookings->booking_name = "customer".$i; 
-            $bookings->booking_email = "customer ".$i."@gmail.com"; 
+            $bookings->booking_contact = '021'.rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9);
+            $bookings->booking_name = $faker->firstNameMale; 
+            $bookings->booking_email = $faker->unique()->email(15); 
             $bookings->service_id = rand(1,5); 
-            $bookings->booking_memo  = str_shuffle("abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz  abcdefghijklmnopqrstuvwxyz"); 
+            $bookings->booking_memo  = $faker->paragraph(1); 
             
             if($i<80) { 
                         $bookings->booking_status = "booked"; //waiting, booked, cancelled

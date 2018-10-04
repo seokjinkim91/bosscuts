@@ -41,6 +41,15 @@ class BookingController extends Controller
         return $msg; 
     }
     
+    function updateUserDatetime($user_id, $datetime_id, $status){ 
+         
+         Users_datetimes::where('user_id',$user_id)
+                  ->where('datetime_id',$datetime_id)
+                  ->update(['status' => $status]); 
+        
+    } 
+    
+    
     function deleteUserDatetimes($user_id, $datetime_ids){
      
         

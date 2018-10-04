@@ -83,7 +83,10 @@
                      <ul class="nav navbar-nav navbar-left">
                             <li><a href="{{asset('admin')}}">Schedule</a>
 		                    <li><a href="{{asset('admin/bookings')}}">Bookings</a></li>
+		                    
+		                    @if(strcmp(Auth::user()->role,"admin")!=0)
 		                	<li><a href="{{asset('admin/profile')}}">Profile</a></li>
+                            @endif
                             
                             <!--### Admin User Only Menu ###-->
                             @if(strcmp(Auth::user()->role,"admin")==0)

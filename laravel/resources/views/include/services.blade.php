@@ -1,9 +1,11 @@
 	<section class="module" id="services">
           <div class="container">
+            
+            <!--Bosscuts history maybe?-->
+            
           	 <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
                 <h2 class="module-title font-alt">Our Services</h2>
-                <div class="module-subtitle font-serif">A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.</div>
               </div>
              </div>
             <div class="row multi-columns-row">
@@ -24,8 +26,17 @@
                 <div class="menu">
                   <div class="row">
                     <div class="col-sm-8">
-                      <h4 class="menu-title font-alt">{{$service->service_title}}</h4>
-                      <div class="menu-detail font-serif">{{$service->service_desc}} ({{$service->service_mins}} min)</div>
+                      <h4 class="menu-title font-alt" 
+                            @if(strtolower($service->service_type)=="special")
+                            style="font-weight: bold;">
+                            <i style="color:red; font-weight: bold;" class="fa fa-check-circle"></i>
+                            @else
+                            >
+                            @endif
+                            
+                            {{$service->service_title}}
+                      </h4>
+                      <div class="menu-detail font-serif"> {{$service->service_desc}} ({{$service->service_mins}} min)</div>
                     </div>
                     <div class="col-sm-4 menu-price-detail">
                       <h4 class="menu-price font-alt">${{$service->service_price}}</h4>

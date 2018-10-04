@@ -37,7 +37,12 @@
             						<td>{{$applicant->applicant_email }}</td>
             						<th>{{$applicant->applicant_type }}</th>
             						
-            						<td><a href="{{ public_path('/public_uploads/1537668769.lalalala.pptx ')}}" download><i class="fa fa-save"></i></a></td>
+            						@php
+            						$file= $applicant->applicant_file_url;
+            						$path = public_path('/public_uploads/'.$file);
+            						@endphp
+            						
+            						<td><a href="/laravel/public/admin/applicants/{{$file}}"><i class="fa fa-save"></i></a></td>
             						<td>
             							<button data-target="#deleteApplicantDialog" data-toggle="modal" data-id="{{$applicant->applicant_id }}" type="button" class="btn btn-danger btn-circle btn-xs open-popup-link">Remove</button>
             						</td>

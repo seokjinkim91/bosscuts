@@ -29,9 +29,7 @@ class AdminController extends Controller
        
        if($request->has('msg')) $msg = $request->msg; 
        
-       if($request->has('staff_id')) $staff_id = $request->staff_id; 
-       else if(strcmp(\Auth::user()->role,"admin")!=0) $staff_id = \Auth::user()->user_id; 
-            else  $staff_id = $staffs[0]->user_id; 
+       $staff_id = self::getStaff($request); 
             
         //Week Str    
         if($request->has('week_str')) $week_str = request('week_str'); 
@@ -54,6 +52,16 @@ class AdminController extends Controller
         return view('admin.schedule', compact('staffs','staff_id','week_str','schedule_str','bookings','no_of_waitings','msg')); 
     }
     
+    private function getStaff($request){
+        
+       $staffs = $this-> getStaffList(); 
+       
+       if($request->has('staff_id')) $staff_id = $request->staff_id; 
+       else if(strcmp(\Auth::user()->role,"admin")!=0) $staff_id = \Auth::user()->user_id; 
+       else  $staff_id = $staffs[0]->user_id; 
+       
+       return $staff_id;
+    }
     
     public function schedule(){
         
@@ -163,7 +171,7 @@ class AdminController extends Controller
     public function getStaffList(){
         $staffs = \DB::table("users")->select("user_id","name") 
                                   ->where("role","staff")
-                                  ->where("enable",0)
+                                  ->where("enable",1)
                                   ->get(); 
                                   
         return $staffs; 
@@ -171,7 +179,10 @@ class AdminController extends Controller
     }
     
     
-    function queryBookings($status=null){
+    function queryBookings($staff_id,$status=null){
+        
+         
+      $role=\Auth::user()->role;
         
        return \DB::select('SELECT  DATE_FORMAT(STR_TO_DATE(datetime_id,\'%Y%m%d%H%i\'), \'%Y-%m-%d(%a) %h:%i %p\') displaydate,
                             b.booking_id,
@@ -179,31 +190,57 @@ class AdminController extends Controller
                             s.service_title,
                             b.booking_name client,
                             b.booking_contact contact,
-                            b.booking_email email
+                            b.booking_email email,
+                            b.updated_at,
+                            b.datetime_id,
+                            b.booking_memo,
+                            b.booking_status status
                             from bookings b 
-                            left join users u on u.user_id=b.user_id
-                            left join services s on b.service_id=s.service_id'. 
+                            inner join users u on u.user_id=b.user_id inner join services s on b.service_id=s.service_id'. 
                             ((empty($status))?'':' where b.booking_status=\''.$status.'\'').
+                            ($role=='admin'?'':' and b.user_id='.$staff_id).
                             ' order by b.datetime_id');  
     }
     
  
     
-     public function getBooking($status=null){
+     public function getBooking(Request $request,$status=null){
+
+        $staff_id = self::getStaff($request); 
                     
-        $bookings = self::queryBookings($status);
+        $bookings = self::queryBookings($staff_id,$status);
         return view('admin.bookings',['bookings'=> $bookings]);
     }
     
     
-    public function getBookings(){
+    // public function getBookings(Request $request){
+    //     return self::getBooking();
+    //     // $tab=request('tab');
+    //     // //dump($tab);
+    //     // switch($tab){
+    //     //     case 'cancel': return self::getBooking('cancelled');
+    //     //     case 'history':return self::getBooking('history');
+    //     //     default: return self::getBooking();
+    //     // }
+    // }
+    
+    
+    public function deleteBookings(){
+         $bookingid=request('bookingid');
         
-        $tab=request('tab');
-        switch($tab){
-            case 'cancel': return self::getBooking('cancelled');
-            case 'history':return self::getBooking('history');
-            default: return self::getBooking('booked');
-        }
+         $booking = \DB::table('bookings')->SELECT('user_id','datetime_id')
+            ->where('booking_id', $bookingid)
+            ->get()->first();
+            
+        $bookingcontroller = new BookingController;
+        $bookingcontroller -> updateUserDatetime($booking->user_id, $booking->datetime_id, "available");
+         
+          \DB::table('bookings')
+            ->where('booking_id', $bookingid)
+            ->delete();
+         
+    
+        return redirect()->action('AdminController@getBooking');
     }
     
     
@@ -218,15 +255,54 @@ class AdminController extends Controller
             ->update(['booking_status' => $status,
                       'updated_at' => date('Y-m-d H:i:s')
             ]);
+    
+    
+        $booking = \DB::table('bookings')->SELECT('user_id','datetime_id')
+            ->where('booking_id', $bookingid)
+            ->get()->first();
             
-        return self::getBookings();
+        if($status =='cancelled') $status = 'available';     
+        $bookingcontroller = new BookingController;
+        $bookingcontroller -> updateUserDatetime($booking->user_id, $booking->datetime_id, $status);
+         
+     
+     return redirect()->action('AdminController@getBooking');
         
+    }
+    
+    
+    
+    public function insertBooking(){
+        
+        //if user doesnt exist ,create user 
+        
+        $userandDate=explode('_',request('employee_date'));
+        $userid=$userandDate[0];
+        $datetimeid=$userandDate[1];
+        $service=request('service');
+        $email=request('email');
+        $contact=request('contact');
+        $name=request('name');
+        
+        $insert=  \DB::table('bookings')->insert(['datetime_id' => $datetimeid,
+                                        'user_id' => $userid,
+                                        'booking_name' => $name,
+                                        'booking_contact' => $contact,
+                                        'booking_email' => $email,
+                                        'service_id' => $service,
+                                        'booking_status'=>'booked',
+                                        'created_at' =>date('Y-m-d H:i:s')
+                                        
+                                        ]);
+            
+        $bookingcontroller = new BookingController;
+        $bookingcontroller -> updateUserDatetime($userid, $datetimeid, "booked");
+        
+        return redirect()->action('AdminController@getBooking');
     }
 
     
-    public function profile(){
-        return view('admin.profile');
-    }
+
     
     private function getServices(){
         return \DB::table('services')->orderBy('service_priority', 'asc')->get();
@@ -239,7 +315,7 @@ class AdminController extends Controller
     
     
     private function checkService($id){
-        return \DB::table('services')->where('service_id',$id)->first();
+        return \DB::table('services')->where('service_id',$id)->exists();
     }
 
     public function editService(){
@@ -249,17 +325,21 @@ class AdminController extends Controller
         $mins=request('duration');
         $price=request('price');
         $desc=request('message');
+        $priority=request('priority');
+        $servicetype=request('servicetype');
+        
+        //   dump($servicetype);
         
         if(self::checkService($id)){
          \DB::table('services')
-            ->where('service_id',$id)
-            ->update(['service_title' => $title,'service_mins' => $mins,'service_price' => $price,'service_desc' => $desc ]);
+            ->where('service_id','=',$id)
+            ->update(['service_title' => $title,'service_mins' => $mins,'service_price' => $price,'service_desc' => $desc,'service_priority'=>$priority,'service_type'=>$servicetype ]);
             
         }
-        else{
-            \DB::table('services')->insert(['service_title' => $title,'service_mins' => $mins,'service_price' => $price,'service_desc' => $desc ]);
+        else
+            \DB::table('services')->insert(['service_title' => $title,'service_mins' => $mins,'service_price' => $price,'service_desc' => $desc,'service_priority'=>$priority,'service_type'=>$servicetype ]);
             
-        }
+        
 
         return self::services(); 
     }
@@ -284,6 +364,14 @@ class AdminController extends Controller
             
        return redirect()->action('AdminController@applicants');
             
+    }
+    
+    
+    public function downloadApplicant($file){
+        
+        //$file=request('filename');
+     
+     return response()->download(public_path('/public_uploads/'.$file));
     }
     
     // Applicants GET
@@ -313,10 +401,148 @@ class AdminController extends Controller
         \DB::table('users')
             ->where('user_id', $userid)
             ->update(['enable' => $enable]);
-        
+    
         
        return redirect()->action('AdminController@users');
     }
+    
+    
+    
+       public function addProfile(Request $request){
+
+        $name=request('fname').request('lname');
+        $email=request('email');
+        $contact=request('contact');
+        $role=request('role');
+        $file = request()->file('file');
+        $fileName=null;
+        
+        if($file!=null){
+        $fileName = time().'.'.$file->getClientOriginalName();
+        $file->move(public_path('/profile'), $fileName);
+        }
+        
+        $pwd=request('password');
+        $cpwd=request('cpassword');
+        
+        if($pwd==$cpwd)
+        {
+
+
+         $role=\Auth::user()->role;
+         $users = \DB::table('users');
+      
+         if($role=='admin'){
+          
+         $id= $users->insertGetId(['name' => $name,
+                  'email' => $email,
+                  'contact' =>$contact,
+                  'role' =>$role,
+                  'created_at' => date('Y-m-d H:i:s'),
+                  'photo_url'=>$fileName,
+                  'enable'=>0
+        ]);
+
+        $userservices=\DB::table('users_services');          
+        foreach((array)request('services') as $service)
+                $userservices->insert(['service_id'=>$service,
+                                     'user_id'=>$id,
+                                     'status'=>'enable',
+                                     'created_at'=>date('Y-m-d H:i:s')
+                                     ]); 
+       
+          
+      }
+      else{
+          
+          $staff_id = self::getStaff($request); 
+          $users->where('user_id',$staff_id)
+                  ->update(['contact' => $contact,
+                            'email'=>$email,
+                            'photo_url'=>$fileName,
+                            'password'=>\Hash::make($pwd)
+                             ]);
+                             
+        $userservices=\DB::table('users_services')
+                        ->where('user_id', '=', $staff_id);
+        
+
+         $services=request('service');
+         if(!empty($userservices))
+             $userservices->delete();
+
+         foreach((array)$services as $service)
+                $userservices->insert(['service_id'=>$service,
+                                     'user_id'=>$staff_id,
+                                     'status'=>'enable',
+                                     'created_at'=>date('Y-m-d H:i:s')
+                                     ]);                      
+                             
+
+         }
+
+        }                  
+        
+      return redirect()->action('AdminController@profile'); 
+    }
+    
+    public function profile(Request $request){
+        
+        $users=null;
+        $services=null;
+        if (\Auth::user()->role!='admin'){
+             $staff_id = self::getStaff($request); 
+             $users=\DB::table('users')
+                            ->where('user_id',$staff_id)->first();
+                            
+                            
+            $services = \DB::select('select users_services.service_id user_serviceid,services.service_id,services.service_title from 
+                        users_services right join services on users_services.service_id=services.service_id and users_services.user_id='.$staff_id);
+                     
+        }
+        
+               
+        return view('admin.profile')->with('services',$services)->with('users',$users);
+    }
+    
+    
+    
+    
+    public function addUsers(){
+        
+        
+      //  $userid=request('userid');
+        $name=request('name');
+        $email=request('email');
+        $contact=request('contact');
+        $role=request('role');
+        
+        
+        
+        $users = \DB::table('users');
+
+        $pwd=\Hash::make(request('password'));
+        
+        $id= $users->insertGetId(['name' => $name,
+                  'email' => $email,
+                  'contact' =>$contact,
+                  'role' =>$role,
+                  'created_at' => date('Y-m-d H:i:s'),
+                  'password' =>$pwd
+        ]);
+
+        $userservices=\DB::table('users_services');          
+        foreach((array)request('services') as $service)
+                $userservices->insert(['service_id'=>$service,
+                                     'user_id'=>$id,
+                                     'status'=>'enable',
+                                     'created_at'=>date('Y-m-d H:i:s')
+                                     ]); 
+                                     
+        
+      return redirect()->action('AdminController@users'); 
+    }
+    
     
     public function updateUsers(){
         
@@ -325,18 +551,36 @@ class AdminController extends Controller
         $email=request('email');
         $contact=request('contact');
         $role=request('role');
-       //$services=request('services');
+        $services=request('services');  
         
-       \DB::table('users')
-        ->where('user_id', $userid)
-        ->update(['name' => $name,
+       
+       $users = \DB::table('users');
+                    
+        if(!empty($userid))
+        $users ->where('user_id', '=', $userid)->update(['name' => $name,
                   'email' => $email,
                   'contact' =>$contact,
                   'role' =>$role,
                   'updated_at' => date('Y-m-d H:i:s')
         ]);
         
-     return redirect()->action('AdminController@users');
+       $userservices=\DB::table('users_services')
+                        ->where('user_id', '=', $userid);
+        
+
+       if(!empty($userservices))
+             $userservices->delete();
+
+        foreach((array)$services as $service)
+                $userservices->insert(['service_id'=>$service,
+                                     'user_id'=>$userid,
+                                     'status'=>'enable',
+                                     'created_at'=>date('Y-m-d H:i:s')
+                                     ]); 
+            
+        
+         return redirect()->action('AdminController@users');
+     
     }
     
     public function getCurrentWeekStr(){ 

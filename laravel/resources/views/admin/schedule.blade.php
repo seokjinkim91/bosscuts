@@ -171,7 +171,7 @@
                      <!--widget-->
                      <br><br>
                     <div class="widget">
-                      <h5 class="widget-title font-alt">Weekly Events</h5>
+                      <h5 class="widget-title font-alt">Weekly Bookings</h5>
                       
                       
                       @if($no_of_waitings>0)
@@ -223,11 +223,12 @@
                       ?>
                       <ul class="widget-posts-meta">
                           <li>&nbsp;&nbsp;&nbsp;&nbsp;{{$booking_hour}} [{{$service_name}}] {{$booking->booking_name}} ({{$booking->booking_contact}}) 
-                          
+                      
+                      <!--    
                           @if(intval($booking->datetime_id) > intval($current_date->format("YmdHi")))
                             <a class="btn-xs" title="Cancel"><i class="fa fa-times"></i></a>
                           @endif 
-                          
+                      -->      
                           </li>
                       </ul>
                       
@@ -278,42 +279,47 @@
       //####### Save Page Control variables ####### 
       $("#save-schedule").click(function() {
        
-        confirm("Are you sure to update?");
-       
-        start_date = {{$week_days[0]['yyyymmdd']}}; 
-        
-        hours = $("#day-schedule").data('artsy.dayScheduleSelector').serialize();
-
-        json = '[';
-
-        for (i = 0; i < 7; i++) {           
-            for (y = 0; y < hours[i].length; y++) {
-                
-                start_hour = ((start_date+i)+hours[i][y][0]).replace( /:/g, "" ); 
-                end_hour =((start_date+i)+hours[i][y][1]).replace( /:/g, "" );
-               
-                json += '{"start":"'+ start_hour+'","end":"'+end_hour+'"},';
+        if(confirm("Are you sure to update?")){ 
+           
+            start_date = {{$week_days[0]['yyyymmdd']}}; 
+            
+            hours = $("#day-schedule").data('artsy.dayScheduleSelector').serialize();
+    
+            json = '[';
+    
+            for (i = 0; i < 7; i++) {           
+                for (y = 0; y < hours[i].length; y++) {
+                    
+                    start_hour = ((start_date+i)+hours[i][y][0]).replace( /:/g, "" ); 
+                    end_hour =((start_date+i)+hours[i][y][1]).replace( /:/g, "" );
+                   
+                    json += '{"start":"'+ start_hour+'","end":"'+end_hour+'"},';
+                }
             }
+    
+           json = json.slice(0, -1)+']';
+    
+            $("#json_str").attr("value", json);
+            
+            $("#schedule_form").attr("action", "admin/schedule/save");
+            $("#schedule_form").submit(); 
+            
         }
-
-       json = json.slice(0, -1)+']';
-
-        $("#json_str").attr("value", json);
-        
-        $("#schedule_form").attr("action", "admin/schedule/save");
-        $("#schedule_form").submit(); 
-        
         
       });
       
       $("#enable-schedule").click(function() {
-         $("#schedule_form").attr("action", "admin/schedule/enable");
-         $("#schedule_form").submit(); 
+         if(confirm("Are you sure to update?")){ 
+            $("#schedule_form").attr("action", "admin/schedule/enable");
+            $("#schedule_form").submit(); 
+         }
       });
       
       $("#disable-schedule").click(function() {
-          $("#schedule_form").attr("action", "admin/schedule/disable");
-          $("#schedule_form").submit(); 
+          if(confirm("Are you sure to update?")){ 
+            $("#schedule_form").attr("action", "admin/schedule/disable");
+            $("#schedule_form").submit(); 
+          }
       });
       
       

@@ -1,25 +1,33 @@
   <section class="module bg-dark" id="gallery">
   <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">Gallery</h2>
-                <div class="module-subtitle font-serif">Photos from instagram</div>
-              </div>
+      <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+               <h2 class="module-title font-alt">Gallery</h2>
             </div>
-            <div id="instagram" class="row multi-columns-row"></div>
+      </div>
+      
+      <div class="row multi-columns-row">
+        <div id="instagram"> </div>
+      </div>
+      <!-- <button id="btn-instafeed-load" class="btn">Load more</button> -->
+
             
   </div>
   
+  
+  
   <?php
-    $insta_template = '<div class="col-sm-6 col-md-3 col-lg-3"> '.
-                     ' <div class="gallery-item"> '.
-                     ' <div class="gallery-image"><a class="gallery" href="{{link}}" title="{{caption}}"><img src="{{image}}" alt="{{caption}}"/> ' .
-                     ' <div class="gallery-caption">'.
-                     ' <div class="gallery-icon"><span class="icon-magnifying-glass"></span></div> '.
+    
+    $insta_template =  '<div class="works-grid works-grid-masonry works-hover-w works-grid-5">'.
+                     ' <div class="work-item" > '.
+                     ' <div class="work-image"><a class="gallery" target="_blank" href="{{link}}" title="{{caption}}"><img src="{{image}}" alt="{{caption}}"/> ' .
+                     ' <div class="work-caption">'.
+                     ' <span class="fa fa-heart"></span>&nbsp;{{likes}}&nbsp;&nbsp;<span class="fa  fa-comment"></span>&nbsp;{{comments}}<br>{{caption}}'.
                      ' </div></a></div> '.
                      ' </div>'.
                      ' </div>';
-                     
+                   
+     
                      
   ?>
   
@@ -31,6 +39,7 @@
         /* ---------------------------------------------- /*
           * Instagram Loader 
          /* ---------------------------------------------- */
+        
            var feed = new Instafeed({
             		get: 'user',
             		userId: 8595272311,
@@ -39,12 +48,13 @@
             		resolution: 'standard_resolution',
             		sortBy: 'most-recent', 
             		template: '<?php echo htmlspecialchars_decode($insta_template, ENT_NOQUOTES); ?>',
-            
             });
            
            feed.run()
            
         }); 
+        
+      
 
     
   </script>

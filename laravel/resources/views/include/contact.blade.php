@@ -3,7 +3,7 @@
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
                 <h2 class="module-title font-alt">Contact</h2>
-                <div class="module-subtitle font-serif">We are alway waiting for you</div>
+                <!--<div class="module-subtitle font-serif">We are alway waiting for you</div>-->
               </div>
             </div>
             <div class="row">
@@ -23,7 +23,7 @@
                 </div>
                 <div class="alt-features-item mt-xs-60">
                   <div class="alt-features-icon"><span class="icon-phone"></span></div>
-                  <h3 class="alt-features-title font-alt">Contact Detail</h3>Email: bosscutshamilton@gmail.com<br>Phone: 07-855-6874<br><br>
+                  <h3 class="alt-features-title font-alt">Contact Detail</h3>Email: <a href="mailto:bosscutshamilton@gmail.com">bosscutshamilton@gmail.com</a><br>Phone: <a href="tel:078556874">07-855-6874</a><br><br>
                   <a class="btn btn-d btn-round" href="https://comps710-seokjinkim.c9users.io/laravel/public/booking">Book Now</a>
 				      </div>
               </div>

@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Factories;
+
+
 class MainController extends Controller
 {
     //
     public function index(){ 
         
-        $services=\DB::table('services')->orderBy('service_priority', 'desc')->get(); 
+        $services=\DB::table('services')->orderBy('service_priority', 'asc')->get(); 
 
         return (view('index',compact('services')))->with('page_name',"main"); 
      
@@ -30,7 +32,7 @@ class MainController extends Controller
        $booking=\DB::select('select users.user_id as id,users_datetimes.datetime_id datetimeid,SUBSTRING_INDEX(users.name, \' \', 1) as employee,
                              DATE_FORMAT( STR_TO_DATE(users_datetimes.datetime_id,\'%Y%m%d%H%i\'), \'%d/%M/%Y %H:%i\') datetime
                              from users left join users_datetimes on users.user_id = users_datetimes.user_id 
-                             where left(users_datetimes.datetime_id,8) ='.$date);            
+                             where users_datetimes.status=\'available\' and enable=1 and left(users_datetimes.datetime_id,8) ='.$date);            
                     
         
         return json_encode($booking);
@@ -39,13 +41,17 @@ class MainController extends Controller
     
     //services provided
     public function bookingServices(){
-       $empid=  $_GET['empid'];
+        
+        
+       $empid=  request('empid');
+       
        $services=\DB::select('select services.service_id,CONCAT(SUBSTRING_INDEX(services.service_title,\' \',2),\' - $\',
-                             services.service_price) as service from users_services join services 
-                             where users_services.user_id='.$empid.' and users_services.status=\'enable\' 
+                             services.service_price) as service from users_services left join services on users_services.service_id=services.service_id   
+                             where users_services.user_id='.$empid.'  
                              group by services.service_id,CONCAT(SUBSTRING_INDEX(services.service_title,\' \',2),\' - $\',
                              services.service_price)
                              ');
+                             
      
       return json_encode($services);
     }
@@ -68,11 +74,14 @@ class MainController extends Controller
                                         'booking_contact' => $contact,
                                         'booking_email' => $email,
                                         'service_id' => $service,
-                                        'booking_status'=>'booked',
+                                        'booking_status'=>'waiting',
                                         'created_at' =>date('Y-m-d H:i:s')
                                         
                                         ]);
-
+       
+        $bookingcontroller = new BookingController;
+        $bookingcontroller -> updateUserDatetime($userid, $datetimeid, "waiting");
+        
         if(!empty($insert)){
         $returnvalue=true;
         }
@@ -88,14 +97,6 @@ class MainController extends Controller
     
     public function careersubmit(){
 
-                 
-            //     $input = request('fileurl');
-            //     $imgpath= $input->getClientOriginalName();
-            //     var_dump($imgpath);
-            //   // var_dump(new \Symfony\Component\HttpFoundation\File\File($filePath));
- 
-           //  $applicants->applicant_file_url =request()->file('fileurl')->store('public/applicants');
-   
              $file = request()->file('fileurl');
 
              $fileName = time().'.'.$file->getClientOriginalName();

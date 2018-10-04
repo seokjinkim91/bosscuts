@@ -28,12 +28,13 @@
                         <th>Duration</th>
                         <th>Price</th>
             						<th>Type</th>
-            						<!--<th>Priority</th>-->
+            						<th>Priority</th>
             						<th>Description</th>
             						<th>&nbsp;</th>
                       </tr>
                     </thead>
                     <tbody>
+        
                       
                       @foreach($services as $i=> $service)
                       
@@ -42,7 +43,7 @@
                         <td>{{ $service-> service_mins}}</td>
                         <td>{{ $service-> service_price}}</td>
 						            <td>{{ $service-> service_type}}</td>
-						            <!--<th>{{ $service-> service_priority}}</th>-->
+						            <th>{{ $service-> service_priority}}</th>
 					            	<td>{{ $service-> service_desc}}</td>
             						<td>
             						  <?php
@@ -51,10 +52,12 @@
             						  $mins=$service-> service_mins;
             						  $price=$service-> service_price;
             						  $type=$service-> service_type;
-            						  // $priority=$service-> service_priority;
+            						  $priority=$service-> service_priority;
             						  $desc=$service-> service_desc;
+            						  $servicetype=$service->service_type;
             						  
-            						  echo "<button data-target='#editDialog' data-toggle='modal' data-id='$id' data-title='$title' data-mins='$mins' data-price='$price' data-type='$type' data-desc='$desc' class='btn btn-d btn-circle btn-xs open-popup-link' type='button'>Edit</button>
+            						  
+            						  echo "<button data-target='#editDialog' data-toggle='modal' data-id='$id' data-title='$title' data-mins='$mins' data-price='$price' data-type='$type' data-desc='$desc' data-priority='$priority' data-servicetype='$servicetype' class='btn btn-d btn-circle btn-xs open-popup-link' type='button'>Edit</button>
             							<button data-target='#deleteDialog' data-toggle='modal' data-id='$id' data-title='$title' class='btn btn-danger btn-circle btn-xs open-popup-link' type='button'>Remove</button>";
             						  ?>
             					  </td>
@@ -98,9 +101,22 @@
                     <input class="form-control" type="number" id="duration" name="duration" placeholder="Total duration"/>
                     <p class="help-block text-danger"></p>
                   </div>
+                  <div class="form-group">
+                    <label for="duration">Service type</label>
+                    <select class="form-control" name="servicetype" id="servicetype">
+                      <option>Normal</option>
+                      <option>Special</option>
+                    </select>
+                    <p class="help-block text-danger"></p>
+                  </div>
 				          <div class="form-group">
                     <label for="price">Price ($)</label>
                     <input class="form-control" type="number" id="price" name="price" placeholder="Price details" />
+                    <p class="help-block text-danger"></p>
+                  </div>
+  			          <div class="form-group">
+                    <label for="priority">Priority</label>
+                    <input class="form-control" type="number" id="priority" name="priority" placeholder="Enter priority" />
                     <p class="help-block text-danger"></p>
                   </div>
                   <div class="form-group">
